@@ -1,11 +1,34 @@
-import { Container } from "react-bootstrap"
+
+import { ItemList } from "../itemList/itemList"
 
 export const ItemListContainer = ({greeting}) =>{
+    const [loading,setLoading] = useState(false)
+    const [productos,setProductos] = useState([])
+    useEffect(()=>{
+        setLoading(true)
+        pedirDatos()
+            .then( (resp) =>{
+                setProductos(resp)
+            })
+            .catch((error) =>{
+                console.log(error)
+            })
+            .finally(()=>{
+                setLoading(false)
+            })
+    })
+
+
     return (
-        <Container>
-            <h2>{greeting}</h2>
-            <hr/>
-        </Container>
+
+        <>
+            {
+                loading
+                    ?<h2>Cargando...</h2>
+                    :<ItemList productos={productos}/>
+            }
+            
+        </>
         
     )
 }
